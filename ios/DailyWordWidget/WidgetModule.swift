@@ -9,6 +9,7 @@ class WidgetModule: NSObject, RCTBridgeModule {
     return "WidgetModule"
   }
   
+  @objc
   static func requiresMainQueueSetup() -> Bool {
     return false
   }
