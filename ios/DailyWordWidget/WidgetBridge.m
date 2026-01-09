@@ -9,9 +9,4 @@ RCT_EXTERN_METHOD(updateWidget:(NSDictionary *)data
 RCT_EXTERN_METHOD(reloadWidget:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
-+ (BOOL)requiresMainQueueSetup
-{
-  return NO;
-}
-
 @end

@@ -3,11 +3,7 @@ import React
 import WidgetKit
 
 @objc(WidgetModule)
-class WidgetModule: NSObject, RCTBridgeModule {
-  
-  static func moduleName() -> String! {
-    return "WidgetModule"
-  }
+class WidgetModule: NSObject {
   
   @objc
   static func requiresMainQueueSetup() -> Bool {
