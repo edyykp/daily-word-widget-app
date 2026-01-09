@@ -1,0 +1,22 @@
+/**
+ * Utility functions
+ * Helper functions used across the application
+ */
+
+// Example utility functions
+export const formatDate = (date: Date): string => {
+  return date.toLocaleDateString();
+};
+
+export const debounce = <T extends (...args: unknown[]) => unknown>(
+  func: T,
+  wait: number,
+): ((...args: Parameters<T>) => void) => {
+  let timeout: NodeJS.Timeout;
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+};
+
+// Add more utility functions as needed

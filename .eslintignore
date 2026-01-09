@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+Pods/
+
+# Build outputs
+build/
+dist/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# React Native
+android/
+ios/
+.expo/
+
+# Config files
+*.config.js
+babel.config.js
+metro.config.js
+
+# Misc
+coverage/
+.env
+.env.local

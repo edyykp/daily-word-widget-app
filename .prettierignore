@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+Pods/
+
+# Build outputs
+build/
+dist/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# React Native
+android/
+ios/
+.expo/
+
+# Misc
+*.lock
+coverage/
+.env
+.env.local
