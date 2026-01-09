@@ -12,6 +12,8 @@
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		994B13E5D90D755620376071 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		D50BD9C12F1147A800432D85 /* WidgetBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = D50BD9BF2F1147A800432D85 /* WidgetBridge.m */; };
+		D50BD9C22F1147A800432D85 /* WidgetModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BD9C02F1147A800432D85 /* WidgetModule.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,9 @@
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = DailyWordWidget/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = DailyWordWidget/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B8922181C25C74C913DBF46D /* Pods-DailyWordWidget.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DailyWordWidget.release.xcconfig"; path = "Target Support Files/Pods-DailyWordWidget/Pods-DailyWordWidget.release.xcconfig"; sourceTree = "<group>"; };
+		D50BD9BF2F1147A800432D85 /* WidgetBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = WidgetBridge.m; path = DailyWordWidget/WidgetBridge.m; sourceTree = "<group>"; };
+		D50BD9C02F1147A800432D85 /* WidgetModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WidgetModule.swift; path = DailyWordWidget/WidgetModule.swift; sourceTree = "<group>"; };
+		D50BD9C32F1148D600432D85 /* DailyWordWidget-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DailyWordWidget-Bridging-Header.h"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -42,11 +47,14 @@
 		13B07FAE1A68108700A75B9A /* DailyWordWidget */ = {
 			isa = PBXGroup;
 			children = (
+				D50BD9C32F1148D600432D85 /* DailyWordWidget-Bridging-Header.h */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
+				D50BD9BF2F1147A800432D85 /* WidgetBridge.m */,
+				D50BD9C02F1147A800432D85 /* WidgetModule.swift */,
 			);
 			name = DailyWordWidget;
 			sourceTree = "<group>";
@@ -131,7 +139,7 @@
 				LastUpgradeCheck = 1210;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 2620;
 					};
 				};
 			};
@@ -247,6 +255,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				761780ED2CA45674006654EE /* AppDelegate.swift in Sources */,
+				D50BD9C12F1147A800432D85 /* WidgetBridge.m in Sources */,
+				D50BD9C22F1147A800432D85 /* WidgetModule.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +285,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = DailyWordWidget;
+				SWIFT_INCLUDE_PATHS = "$(inherited) \"${PODS_CONFIGURATION_BUILD_DIR}/RCTSwiftUI\" $(SRCROOT)/../node_modules/react-native/ReactCommon $(SRCROOT)/../node_modules/react-native/React";
+				SWIFT_OBJC_BRIDGING_HEADER = "DailyWordWidget-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -302,6 +314,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = DailyWordWidget;
+				SWIFT_INCLUDE_PATHS = "$(inherited) \"${PODS_CONFIGURATION_BUILD_DIR}/RCTSwiftUI\" $(SRCROOT)/../node_modules/react-native/React $(SRCROOT)/../node_modules/react-native/ReactCommon";
+				SWIFT_OBJC_BRIDGING_HEADER = "DailyWordWidget-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

@@ -6,7 +6,7 @@
 import { DictionaryEntry } from '../types';
 
 const DICTIONARY_API_BASE = 'https://api.dictionaryapi.dev/api/v2/entries/en';
-const RANDOM_WORD_API = 'https://random-word-api.herokuapp.com/word';
+const RANDOM_WORD_API = 'https://random-word-api.vercel.app/api?words=1';
 
 /**
  * Fetches a random word from the random word API
