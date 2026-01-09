@@ -67,7 +67,7 @@ export const fetchRandomWordWithDefinition = async (
     }
 
     // Wait a bit before retrying to avoid rate limiting
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise<void>(resolve => setTimeout(() => resolve(), 500));
   }
 
   // If all retries fail, return a fallback word
