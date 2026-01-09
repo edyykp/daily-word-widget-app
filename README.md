@@ -1,4 +1,33 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Daily Word Widget
+
+A React Native app that displays a daily random word from the English dictionary with its definition. The app provides lock screen widgets (iOS) and home screen widgets (Android) that update automatically each day.
+
+## Features
+
+- 📱 **Daily Word**: Get a new random word with definition every day
+- 🔄 **Auto-Update**: Words automatically refresh daily
+- 📲 **Widgets**: Lock screen widgets (iOS) and home screen widgets (Android)
+- 💾 **Offline Support**: Words are cached locally for offline viewing
+- 🎨 **Clean UI**: Modern, user-friendly interface
+
+## Widget Setup
+
+For detailed widget setup instructions, see [WIDGET_SETUP.md](./WIDGET_SETUP.md).
+
+### Quick Setup
+
+**iOS:**
+
+1. Add Widget Extension in Xcode (see WIDGET_SETUP.md for details)
+2. Configure App Groups: `group.com.dailywordwidget`
+3. Build and run on iOS 16+ device
+
+**Android:**
+
+1. Build and run the app
+2. Long press home screen → Widgets → Add "Daily Word Widget"
+
+This is a [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started
 

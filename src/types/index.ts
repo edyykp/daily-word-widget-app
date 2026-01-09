@@ -16,6 +16,37 @@ export interface ApiResponse<T> {
   message?: string;
 }
 
+// Word-related types
+export interface WordDefinition {
+  definition: string;
+  partOfSpeech: string;
+  example?: string;
+}
+
+export interface DictionaryEntry {
+  word: string;
+  phonetic?: string;
+  meanings: Array<{
+    partOfSpeech: string;
+    definitions: Array<{
+      definition: string;
+      example?: string;
+      synonyms?: string[];
+      antonyms?: string[];
+    }>;
+  }>;
+  sourceUrls?: string[];
+}
+
+export interface DailyWord {
+  word: string;
+  definition: string;
+  phonetic?: string;
+  partOfSpeech?: string;
+  example?: string;
+  date: string; // ISO date string
+}
+
 // Navigation types (when using React Navigation)
 // export type RootStackParamList = {
 //   Home: undefined;

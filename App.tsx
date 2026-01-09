@@ -1,46 +1,46 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * Daily Word Widget App
+ * Shows a daily word with definition and provides lock screen widget
  *
  * @format
  */
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import React, { useEffect } from 'react';
+import { StatusBar, StyleSheet, useColorScheme } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { colors, commonStyles } from './src/theme';
+import { HomeScreen } from './src/screens/HomeScreen';
+import { getCurrentDailyWord } from './src/services/wordService';
+import { updateWidget } from './src/services/widgetService';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
+  useEffect(() => {
+    // Initialize widget on app start
+    const initializeWidget = async () => {
+      try {
+        const word = await getCurrentDailyWord();
+        await updateWidget(word);
+      } catch (error) {
+        console.error('Error initializing widget:', error);
+      }
+    };
+
+    initializeWidget();
+  }, []);
+
   return (
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
+      <HomeScreen />
     </SafeAreaProvider>
-  );
-}
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={[commonStyles.container, styles.container]}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.background,
+    flex: 1,
   },
 });
 
