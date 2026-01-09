@@ -32,3 +32,10 @@ target 'DailyWordWidget' do
     )
   end
 end
+
+# Expose pods (header search paths) to the widget extension target so it can import React headers
+target 'DailyWordWidgetExtension' do
+  platform :ios, min_ios_version_supported
+  # Inherit search paths from the main app target to avoid duplicating pods.
+  inherit! :search_paths
+end

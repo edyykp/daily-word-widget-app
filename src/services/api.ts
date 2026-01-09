@@ -8,10 +8,41 @@ import { DictionaryEntry } from '../types';
 const DICTIONARY_API_BASE = 'https://api.dictionaryapi.dev/api/v2/entries/en';
 const RANDOM_WORD_API = 'https://random-word-api.vercel.app/api?words=1';
 
+// Local dictionary loading (fallbacks to networked random-word API only if the local list is missing)
+let DICTIONARY_WORDS: string[] = [];
+try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const dict = require('../assets/dictionary.json') as Record<string, number>;
+  DICTIONARY_WORDS = Object.keys(dict);
+} catch (e) {
+  console.warn('Local dictionary not found or failed to load:', e);
+}
+
 /**
- * Fetches a random word from the random word API
+ * Fetches a random word — prefers the bundled `dictionary.json` for offline operation.
  */
 export const fetchRandomWord = async (): Promise<string> => {
+  // Prefer local dictionary
+  if (DICTIONARY_WORDS.length > 0) {
+    // Try several attempts to find a word that passes local filters
+    for (let i = 0; i < 20; i++) {
+      const candidate =
+        DICTIONARY_WORDS[Math.floor(Math.random() * DICTIONARY_WORDS.length)];
+      const norm = normalizeWord(candidate);
+      if (!norm) continue;
+      if (isCommonWord(norm)) continue;
+      if (norm.length <= 4) continue;
+      if (/[^a-z'-]/.test(candidate)) continue;
+      return candidate;
+    }
+    // Fallback to any local word if filters didn't succeed
+    return (
+      DICTIONARY_WORDS[Math.floor(Math.random() * DICTIONARY_WORDS.length)] ||
+      'hello'
+    );
+  }
+
+  // If no local dictionary present, fall back to networked random-word API
   try {
     const response = await fetch(RANDOM_WORD_API);
     if (!response.ok) {
@@ -21,24 +52,25 @@ export const fetchRandomWord = async (): Promise<string> => {
     return words[0] || 'hello';
   } catch (error) {
     console.error('Error fetching random word:', error);
-    // Fallback to a default word if API fails
     return 'hello';
   }
 };
 
 /**
- * Fetches word definition from the dictionary API
+ * Fetches word definition from the dictionary API (online-first).
+ * Falls back to a minimal offline placeholder if network fails; returns null on 404.
  */
 export const fetchWordDefinition = async (
   word: string,
 ): Promise<DictionaryEntry | null> => {
+  const normalized = normalizeWord(word);
+  if (!normalized) return null;
+
   try {
-    const response = await fetch(
-      `${DICTIONARY_API_BASE}/${word.toLowerCase()}`,
-    );
+    const response = await fetch(`${DICTIONARY_API_BASE}/${normalized}`);
     if (!response.ok) {
       if (response.status === 404) {
-        // Word not found, try fetching a new random word
+        // Not found - let caller retry with another word
         return null;
       }
       throw new Error('Failed to fetch word definition');
@@ -46,8 +78,21 @@ export const fetchWordDefinition = async (
     const entries: DictionaryEntry[] = await response.json();
     return entries[0] || null;
   } catch (error) {
-    console.error('Error fetching word definition:', error);
-    return null;
+    // Network error / offline: return a minimal placeholder so UI still shows something
+    console.warn(
+      'Online dictionary fetch failed, using minimal fallback:',
+      error,
+    );
+    const entry: DictionaryEntry = {
+      word: normalized,
+      meanings: [
+        {
+          partOfSpeech: 'noun',
+          definitions: [{ definition: 'Definition not available (offline).' }],
+        },
+      ],
+    };
+    return entry;
   }
 };
 
@@ -256,15 +301,15 @@ const isInteresting = (entry: DictionaryEntry): boolean => {
   if (/[^a-z'-]/.test(word)) return false;
 
   const firstMeaning = entry.meanings?.[0];
-  if (!firstMeaning) return false;
+  if (firstMeaning) {
+    const pos = (firstMeaning.partOfSpeech || '').toLowerCase();
+    // Accept nouns, verbs, adjectives, adverbs; avoid pronouns, determiners, conjunctions, prepositions
+    if (!/(noun|verb|adject|adv)/.test(pos)) return false;
 
-  const pos = (firstMeaning.partOfSpeech || '').toLowerCase();
-  // Accept nouns, verbs, adjectives, adverbs; avoid pronouns, determiners, conjunctions, prepositions
-  if (!/(noun|verb|adject|adv)/.test(pos)) return false;
-
-  const def = firstMeaning.definitions?.[0]?.definition || '';
-  // Require a reasonably informative definition
-  if (def.length < 25) return false;
+    const def = firstMeaning.definitions?.[0]?.definition || '';
+    // If a definition exists, require it to be reasonably informative (but be lenient for offline placeholders)
+    if (def && def.length < 10) return false;
+  }
 
   return true;
 };
