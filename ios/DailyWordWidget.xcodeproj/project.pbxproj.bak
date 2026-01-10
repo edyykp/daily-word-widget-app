@@ -12,7 +12,6 @@
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		994B13E5D90D755620376071 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
-		D20CB176B2642DEC95141398 /* libPods-DailyWordWidgetExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 508D487F0D5CAC75AEBB68F4 /* libPods-DailyWordWidgetExtension.a */; };
 		D50BD9C12F1147A800432D85 /* WidgetBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = D50BD9BF2F1147A800432D85 /* WidgetBridge.m */; };
 		D50BD9C22F1147A800432D85 /* WidgetModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50BD9C02F1147A800432D85 /* WidgetModule.swift */; };
 		D594990A2F115C9700C50380 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D59498E92F115C1D00C50380 /* WidgetKit.framework */; };
@@ -45,17 +44,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0AD43096EBB28AAD4C88FF3C /* Pods-DailyWordWidgetExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DailyWordWidgetExtension.debug.xcconfig"; path = "Target Support Files/Pods-DailyWordWidgetExtension/Pods-DailyWordWidgetExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* DailyWordWidget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DailyWordWidget.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = DailyWordWidget/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = DailyWordWidget/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = DailyWordWidget/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		24EE53DDD5662D0ABB892460 /* libPods-DailyWordWidget.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DailyWordWidget.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		508D487F0D5CAC75AEBB68F4 /* libPods-DailyWordWidgetExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DailyWordWidgetExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		672E83AD0B39EF6CC79B8472 /* Pods-DailyWordWidget.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DailyWordWidget.debug.xcconfig"; path = "Target Support Files/Pods-DailyWordWidget/Pods-DailyWordWidget.debug.xcconfig"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = DailyWordWidget/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = DailyWordWidget/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8BF0DAE6865A3D833C9C7690 /* Pods-DailyWordWidgetExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DailyWordWidgetExtension.release.xcconfig"; path = "Target Support Files/Pods-DailyWordWidgetExtension/Pods-DailyWordWidgetExtension.release.xcconfig"; sourceTree = "<group>"; };
 		B8922181C25C74C913DBF46D /* Pods-DailyWordWidget.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DailyWordWidget.release.xcconfig"; path = "Target Support Files/Pods-DailyWordWidget/Pods-DailyWordWidget.release.xcconfig"; sourceTree = "<group>"; };
 		D50BD9BF2F1147A800432D85 /* WidgetBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = WidgetBridge.m; path = DailyWordWidget/WidgetBridge.m; sourceTree = "<group>"; };
 		D50BD9C02F1147A800432D85 /* WidgetModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WidgetModule.swift; path = DailyWordWidget/WidgetModule.swift; sourceTree = "<group>"; };
@@ -67,7 +63,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		D594991D2F115C9900C50380 /* Exceptions for "DailyWordWidgetExtension" folder in "DailyWordWidgetExtension" target */ = {
+		D594991D2F115C9900C50380 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -77,18 +73,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		D594990C2F115C9700C50380 /* DailyWordWidgetExtension */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				D594991D2F115C9900C50380 /* Exceptions for "DailyWordWidgetExtension" folder in "DailyWordWidgetExtension" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = DailyWordWidgetExtension;
-			sourceTree = "<group>";
-		};
+		D594990C2F115C9700C50380 /* DailyWordWidgetExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (D594991D2F115C9900C50380 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DailyWordWidgetExtension; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +91,6 @@
 			files = (
 				D594990B2F115C9700C50380 /* SwiftUI.framework in Frameworks */,
 				D594990A2F115C9700C50380 /* WidgetKit.framework in Frameworks */,
-				D20CB176B2642DEC95141398 /* libPods-DailyWordWidgetExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,7 +119,6 @@
 				24EE53DDD5662D0ABB892460 /* libPods-DailyWordWidget.a */,
 				D59498E92F115C1D00C50380 /* WidgetKit.framework */,
 				D59498EB2F115C1E00C50380 /* SwiftUI.framework */,
-				508D487F0D5CAC75AEBB68F4 /* libPods-DailyWordWidgetExtension.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -176,8 +159,6 @@
 			children = (
 				672E83AD0B39EF6CC79B8472 /* Pods-DailyWordWidget.debug.xcconfig */,
 				B8922181C25C74C913DBF46D /* Pods-DailyWordWidget.release.xcconfig */,
-				0AD43096EBB28AAD4C88FF3C /* Pods-DailyWordWidgetExtension.debug.xcconfig */,
-				8BF0DAE6865A3D833C9C7690 /* Pods-DailyWordWidgetExtension.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -212,7 +193,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D594991E2F115C9900C50380 /* Build configuration list for PBXNativeTarget "DailyWordWidgetExtension" */;
 			buildPhases = (
-				D880ACD0C11088728253C773 /* [CP] Check Pods Manifest.lock */,
 				D59499052F115C9700C50380 /* Sources */,
 				D59499062F115C9700C50380 /* Frameworks */,
 				D59499072F115C9700C50380 /* Resources */,
@@ -225,6 +205,8 @@
 				D594990C2F115C9700C50380 /* DailyWordWidgetExtension */,
 			);
 			name = DailyWordWidgetExtension;
+			packageProductDependencies = (
+			);
 			productName = DailyWordWidgetExtensionExtension;
 			productReference = D59499092F115C9700C50380 /* DailyWordWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -332,35 +314,17 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DailyWordWidget/Pods-DailyWordWidget-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DailyWordWidget/Pods-DailyWordWidget-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
+			outputPaths = (
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DailyWordWidget/Pods-DailyWordWidget-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D880ACD0C11088728253C773 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-DailyWordWidgetExtension-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DF3B21E88A96099400199082 /* [CP] Copy Pods Resources */ = {
@@ -371,9 +335,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DailyWordWidget/Pods-DailyWordWidget-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-DailyWordWidget/Pods-DailyWordWidget-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -617,7 +585,6 @@
 		};
 		D594991F2F115C9900C50380 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0AD43096EBB28AAD4C88FF3C /* Pods-DailyWordWidgetExtension.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -663,7 +630,6 @@
 		};
 		D59499202F115C9900C50380 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8BF0DAE6865A3D833C9C7690 /* Pods-DailyWordWidgetExtension.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

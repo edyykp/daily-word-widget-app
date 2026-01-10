@@ -6,7 +6,6 @@
 import { DictionaryEntry } from '../types';
 
 const DICTIONARY_API_BASE = 'https://api.dictionaryapi.dev/api/v2/entries/en';
-const RANDOM_WORD_API = 'https://random-word-api.vercel.app/api?words=1';
 
 // Local dictionary loading (fallbacks to networked random-word API only if the local list is missing)
 let DICTIONARY_WORDS: string[] = [];
@@ -35,25 +34,13 @@ export const fetchRandomWord = async (): Promise<string> => {
       if (/[^a-z'-]/.test(candidate)) continue;
       return candidate;
     }
-    // Fallback to any local word if filters didn't succeed
-    return (
-      DICTIONARY_WORDS[Math.floor(Math.random() * DICTIONARY_WORDS.length)] ||
-      'hello'
-    );
   }
 
-  // If no local dictionary present, fall back to networked random-word API
-  try {
-    const response = await fetch(RANDOM_WORD_API);
-    if (!response.ok) {
-      throw new Error('Failed to fetch random word');
-    }
-    const words: string[] = await response.json();
-    return words[0] || 'hello';
-  } catch (error) {
-    console.error('Error fetching random word:', error);
-    return 'hello';
-  }
+  // Fallback to any local word if filters didn't succeed
+  return (
+    DICTIONARY_WORDS[Math.floor(Math.random() * DICTIONARY_WORDS.length)] ||
+    'hello'
+  );
 };
 
 /**
