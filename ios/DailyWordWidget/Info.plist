@@ -37,17 +37,10 @@
 				<key>NSExceptionRequiresForwardSecrecy</key>
 				<false/>
 				<key>NSExceptionMinimumTLSVersion</key>
-				<string>TLSv1.2</string>
+				<string>TLSv1.0</string>
 				<key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
 				<false/>
-			</dict>
-			<key>api.dictionaryapi.dev</key>
-			<dict>
-				<key>NSExceptionRequiresForwardSecrecy</key>
-				<false/>
-				<key>NSExceptionMinimumTLSVersion</key>
-				<string>TLSv1.2</string>
-				<key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+				<key>NSRequiresCertificateTransparency</key>
 				<false/>
 			</dict>
 		</dict>
@@ -55,6 +48,8 @@
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<false/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
