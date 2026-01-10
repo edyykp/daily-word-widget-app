@@ -31,6 +31,7 @@ class WidgetModule(reactContext: ReactApplicationContext) :
             editor.putString("partOfSpeech", data.getString("partOfSpeech") ?: "")
             editor.putString("example", data.getString("example") ?: "")
             editor.putString("date", data.getString("date") ?: "")
+            editor.putString("language", data.getString("language") ?: "en")
             editor.apply()
 
             // Update the widget

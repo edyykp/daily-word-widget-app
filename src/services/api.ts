@@ -6,14 +6,21 @@
 import { DictionaryEntry } from '../types';
 import DICTIONARY_WORDS from '../assets/dictionary.json';
 const dictionaryWords = DICTIONARY_WORDS as string[];
-const DICTIONARY_API_BASE = 'https://api.dictionaryapi.dev/api/v2/entries/en';
+
+// Dictionary API base - supports multiple languages via language code
+const getDictionaryApiBase = (languageCode: string = 'en'): string => {
+  return `https://api.dictionaryapi.dev/api/v2/entries/${languageCode}`;
+};
 
 /**
  * Fetches a random word — prefers the bundled `dictionary.json` for offline operation.
+ * For non-English languages, uses a random word API.
  */
-export const fetchRandomWord = async (): Promise<string> => {
-  // Prefer local dictionary
-  if (dictionaryWords.length > 0) {
+export const fetchRandomWord = async (
+  languageCode: string = 'en',
+): Promise<string> => {
+  // For English, use local dictionary
+  if (languageCode === 'en' && dictionaryWords.length > 0) {
     // Try several attempts to find a word that passes local filters
     for (let i = 0; i < 20; i++) {
       const candidate =
@@ -25,9 +32,71 @@ export const fetchRandomWord = async (): Promise<string> => {
       if (/[^a-z'-]/.test(candidate)) continue;
       return candidate;
     }
+    // Fallback to any local word if filters didn't succeed
+    return (
+      dictionaryWords[Math.floor(Math.random() * dictionaryWords.length)] ||
+      'hello'
+    );
   }
 
-  // Fallback to any local word if filters didn't succeed
+  // For non-English, try to get a random word from API
+  // Note: Since we only have English dictionary locally, we try a common word approach
+  // for non-English languages and rely on the dictionary API to validate the word exists
+  const commonWords: { [key: string]: string[] } = {
+    es: ['amor', 'casa', 'tiempo', 'vida', 'mundo', 'persona', 'libro', 'día'],
+    fr: [
+      'amour',
+      'maison',
+      'temps',
+      'vie',
+      'monde',
+      'personne',
+      'livre',
+      'jour',
+    ],
+    de: ['liebe', 'haus', 'zeit', 'leben', 'welt', 'person', 'buch', 'tag'],
+    it: [
+      'amore',
+      'casa',
+      'tempo',
+      'vita',
+      'mondo',
+      'persona',
+      'libro',
+      'giorno',
+    ],
+    pt: ['amor', 'casa', 'tempo', 'vida', 'mundo', 'pessoa', 'livro', 'dia'],
+    ru: ['любовь', 'дом', 'время', 'жизнь', 'мир', 'человек', 'книга', 'день'],
+    ja: ['愛', '家', '時間', '人生', '世界', '人', '本', '日'],
+    ko: ['사랑', '집', '시간', '인생', '세계', '사람', '책', '날'],
+    zh: ['爱', '家', '时间', '生活', '世界', '人', '书', '天'],
+    ar: ['حب', 'بيت', 'وقت', 'حياة', 'عالم', 'شخص', 'كتاب', 'يوم'],
+    hi: ['प्रेम', 'घर', 'समय', 'जीवन', 'दुनिया', 'व्यक्ति', 'किताब', 'दिन'],
+    tr: ['aşk', 'ev', 'zaman', 'hayat', 'dünya', 'kişi', 'kitap', 'gün'],
+    nl: ['liefde', 'huis', 'tijd', 'leven', 'wereld', 'persoon', 'boek', 'dag'],
+    pl: [
+      'miłość',
+      'dom',
+      'czas',
+      'życie',
+      'świat',
+      'osoba',
+      'książka',
+      'dzień',
+    ],
+  };
+
+  // If we have common words for this language, try using them
+  if (commonWords[languageCode] && commonWords[languageCode].length > 0) {
+    const words = commonWords[languageCode];
+    // Return a random common word - the dictionary API will validate it
+    return words[Math.floor(Math.random() * words.length)];
+  }
+
+  // Last resort: fallback to English word (will need translation/definition)
+  console.warn(
+    `No word list available for language: ${languageCode}, using English fallback`,
+  );
   return (
     dictionaryWords[Math.floor(Math.random() * dictionaryWords.length)] ||
     'hello'
@@ -40,12 +109,14 @@ export const fetchRandomWord = async (): Promise<string> => {
  */
 export const fetchWordDefinition = async (
   word: string,
+  languageCode: string = 'en',
 ): Promise<DictionaryEntry | null> => {
   const normalized = normalizeWord(word);
   if (!normalized) return null;
 
   try {
-    const response = await fetch(`${DICTIONARY_API_BASE}/${normalized}`);
+    const apiBase = getDictionaryApiBase(languageCode);
+    const response = await fetch(`${apiBase}/${normalized}`);
     if (!response.ok) {
       if (response.status === 404) {
         // Not found - let caller retry with another word
@@ -297,23 +368,41 @@ const isInteresting = (entry: DictionaryEntry): boolean => {
  * Retries with a new word if the current word doesn't have a definition or is too common
  */
 export const fetchRandomWordWithDefinition = async (
+  languageCode: string = 'en',
   maxRetries: number = 10,
 ): Promise<DictionaryEntry | null> => {
-  for (let i = 0; i < maxRetries; i++) {
-    const word = await fetchRandomWord();
-    const definition = await fetchWordDefinition(word);
+  // For non-English, adjust retries (API might have fewer words)
+  const retries = languageCode === 'en' ? maxRetries : Math.min(maxRetries, 5);
 
-    if (definition && isInteresting(definition)) {
-      return definition;
+  for (let i = 0; i < retries; i++) {
+    const word = await fetchRandomWord(languageCode);
+    const definition = await fetchWordDefinition(word, languageCode);
+
+    if (definition) {
+      // For non-English, be less strict with "interesting" filter
+      if (languageCode === 'en') {
+        if (isInteresting(definition)) {
+          return definition;
+        }
+      } else {
+        // Accept any word with a definition for non-English
+        return definition;
+      }
     }
 
     // Wait a bit before retrying to avoid rate limiting
     await new Promise<void>(resolve => setTimeout(() => resolve(), 500));
   }
 
-  // If all retries fail, return a fallback word if it's interesting
-  const fallback = await fetchWordDefinition('hello');
-  return fallback && isInteresting(fallback) ? fallback : null;
+  // If all retries fail, return a fallback word
+  const fallbackWord = languageCode === 'en' ? 'hello' : 'bonjour';
+  const fallback = await fetchWordDefinition(fallbackWord, languageCode);
+  if (fallback) {
+    return fallback;
+  }
+
+  // Last resort: return null to let caller handle
+  return null;
 };
 
 export default {

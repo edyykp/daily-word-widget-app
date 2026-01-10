@@ -5,12 +5,20 @@
 
 import { DailyWord, DictionaryEntry } from '../types';
 import { fetchRandomWordWithDefinition, fetchWordDefinition } from './api';
-import { getDailyWord, saveDailyWord, shouldUpdateWord } from './storage';
+import {
+  getDailyWord,
+  saveDailyWord,
+  shouldUpdateWordWithLanguage,
+  getSelectedLanguage,
+} from './storage';
 
 /**
  * Converts a DictionaryEntry to a DailyWord format
  */
-const convertToDailyWord = (entry: DictionaryEntry): DailyWord => {
+const convertToDailyWord = (
+  entry: DictionaryEntry,
+  languageCode: string = 'en',
+): DailyWord => {
   const firstMeaning = entry.meanings[0];
   const firstDefinition = firstMeaning?.definitions[0];
 
@@ -21,28 +29,35 @@ const convertToDailyWord = (entry: DictionaryEntry): DailyWord => {
     partOfSpeech: firstMeaning?.partOfSpeech,
     example: firstDefinition?.example,
     date: new Date().toISOString(),
+    language: languageCode,
   };
 };
 
 /**
- * Fetches and saves a new daily word
+ * Fetches and saves a new daily word for the specified language
  */
-export const fetchAndSaveDailyWord = async (): Promise<DailyWord> => {
+export const fetchAndSaveDailyWord = async (
+  languageCode: string = 'en',
+): Promise<DailyWord> => {
   try {
-    const dictionaryEntry = await fetchRandomWordWithDefinition();
+    const dictionaryEntry = await fetchRandomWordWithDefinition(languageCode);
 
     if (!dictionaryEntry) {
       // Fallback to a default word if API fails
-      const fallbackEntry = await fetchWordDefinition('hello');
+      const fallbackWord = languageCode === 'en' ? 'hello' : 'bonjour';
+      const fallbackEntry = await fetchWordDefinition(
+        fallbackWord,
+        languageCode,
+      );
       if (!fallbackEntry) {
         throw new Error('Failed to fetch word definition');
       }
-      const dailyWord = convertToDailyWord(fallbackEntry);
+      const dailyWord = convertToDailyWord(fallbackEntry, languageCode);
       await saveDailyWord(dailyWord);
       return dailyWord;
     }
 
-    const dailyWord = convertToDailyWord(dictionaryEntry);
+    const dailyWord = convertToDailyWord(dictionaryEntry, languageCode);
     await saveDailyWord(dailyWord);
     return dailyWord;
   } catch (error) {
@@ -56,20 +71,18 @@ export const fetchAndSaveDailyWord = async (): Promise<DailyWord> => {
  */
 export const getCurrentDailyWord = async (): Promise<DailyWord> => {
   try {
-    const needsUpdate = await shouldUpdateWord();
-
-    if (needsUpdate) {
-      // Fetch a new word for today
-      return await fetchAndSaveDailyWord();
-    }
-
-    // Return the existing word
+    const selectedLanguage = await getSelectedLanguage();
     const existingWord = await getDailyWord();
-    if (!existingWord) {
-      // No word exists, fetch a new one
-      return await fetchAndSaveDailyWord();
+
+    // Check if we need to update (new day or language changed)
+    const needsUpdate = await shouldUpdateWordWithLanguage(selectedLanguage);
+
+    if (needsUpdate || !existingWord) {
+      // Fetch a new word for today with selected language
+      return await fetchAndSaveDailyWord(selectedLanguage);
     }
 
+    // Return the existing word if it's still valid
     return existingWord;
   } catch (error) {
     console.error('Error getting current daily word:', error);
@@ -84,6 +97,7 @@ export const getCurrentDailyWord = async (): Promise<DailyWord> => {
       word: 'hello',
       definition: 'a greeting or expression of goodwill',
       date: new Date().toISOString(),
+      language: 'en',
     };
   }
 };
@@ -92,7 +106,8 @@ export const getCurrentDailyWord = async (): Promise<DailyWord> => {
  * Forces a refresh of the daily word
  */
 export const refreshDailyWord = async (): Promise<DailyWord> => {
-  return await fetchAndSaveDailyWord();
+  const selectedLanguage = await getSelectedLanguage();
+  return await fetchAndSaveDailyWord(selectedLanguage);
 };
 
 export default {

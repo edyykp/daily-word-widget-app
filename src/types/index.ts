@@ -45,6 +45,7 @@ export interface DailyWord {
   partOfSpeech?: string;
   example?: string;
   date: string; // ISO date string
+  language?: string; // Language code (e.g., 'en', 'es')
 }
 
 // Navigation types (when using React Navigation)

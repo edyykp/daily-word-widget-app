@@ -18,6 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { DailyWord } from '../types';
 import { getCurrentDailyWord, refreshDailyWord } from '../services/wordService';
 import { updateWidget } from '../services/widgetService';
+import { LanguageSelector } from '../components/LanguageSelector';
 
 export const HomeScreen: React.FC = () => {
   const [dailyWord, setDailyWord] = useState<DailyWord | null>(null);
@@ -58,6 +59,21 @@ export const HomeScreen: React.FC = () => {
     }
   };
 
+  const handleLanguageChange = async (languageCode: string) => {
+    try {
+      // Language change triggers a new word fetch
+      setLoading(true);
+      const word = await refreshDailyWord();
+      setDailyWord(word);
+      await updateWidget(word);
+    } catch (error) {
+      console.error('Error loading word for new language:', error);
+      Alert.alert('Error', 'Failed to load word for selected language');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -75,6 +91,11 @@ export const HomeScreen: React.FC = () => {
         <View style={styles.header}>
           <Text style={styles.title}>Daily Word</Text>
           <Text style={styles.subtitle}>Your word of the day</Text>
+        </View>
+
+        <View style={styles.languageSelectorContainer}>
+          <Text style={styles.sectionLabel}>Language</Text>
+          <LanguageSelector onLanguageChange={handleLanguageChange} />
         </View>
 
         {dailyWord && (
@@ -162,6 +183,17 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 16,
     color: '#666',
+  },
+  languageSelectorContainer: {
+    marginBottom: 24,
+  },
+  sectionLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#666',
+    marginBottom: 8,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   wordCard: {
     backgroundColor: '#FFFFFF',

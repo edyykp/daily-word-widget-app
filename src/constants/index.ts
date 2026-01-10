@@ -17,6 +17,9 @@ export const STORAGE_KEYS = {
   THEME: '@theme',
 } as const;
 
+// Re-export languages
+export * from './languages';
+
 // Screen names (when using navigation)
 // export const SCREENS = {
 //   HOME: 'Home',

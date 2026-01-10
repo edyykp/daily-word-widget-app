@@ -22,6 +22,7 @@ export const updateWidget = async (word: DailyWord): Promise<void> => {
           partOfSpeech: word.partOfSpeech || '',
           example: word.example || '',
           date: word.date,
+          language: word.language || 'en',
         });
       } else {
         console.warn('WidgetModule not available');

@@ -22,6 +22,7 @@ class WidgetModule: NSObject {
       sharedDefaults?.set(data["partOfSpeech"] as? String ?? "", forKey: "partOfSpeech")
       sharedDefaults?.set(data["example"] as? String ?? "", forKey: "example")
       sharedDefaults?.set(data["date"] as? String ?? "", forKey: "date")
+      sharedDefaults?.set(data["language"] as? String ?? "en", forKey: "language")
       sharedDefaults?.synchronize()
       
       // Reload widget timeline
