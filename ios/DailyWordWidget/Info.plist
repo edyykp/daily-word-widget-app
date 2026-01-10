@@ -34,12 +34,21 @@
 			<dict>
 				<key>NSIncludesSubdomains</key>
 				<true/>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
 				<key>NSExceptionRequiresForwardSecrecy</key>
 				<false/>
 				<key>NSExceptionMinimumTLSVersion</key>
-				<string>TLSv1.0</string>
+				<string>TLSv1.2</string>
+				<key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+				<false/>
+			</dict>
+			<key>api.dictionaryapi.dev</key>
+			<dict>
+				<key>NSExceptionRequiresForwardSecrecy</key>
+				<false/>
+				<key>NSExceptionMinimumTLSVersion</key>
+				<string>TLSv1.2</string>
+				<key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+				<false/>
 			</dict>
 		</dict>
 		<key>NSAllowsArbitraryLoads</key>
