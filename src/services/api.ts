@@ -4,29 +4,20 @@
  */
 
 import { DictionaryEntry } from '../types';
-
+import DICTIONARY_WORDS from '../assets/dictionary.json';
+const dictionaryWords = DICTIONARY_WORDS as string[];
 const DICTIONARY_API_BASE = 'https://api.dictionaryapi.dev/api/v2/entries/en';
-
-// Local dictionary loading (fallbacks to networked random-word API only if the local list is missing)
-let DICTIONARY_WORDS: string[] = [];
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const dict = require('../assets/dictionary.json') as Record<string, number>;
-  DICTIONARY_WORDS = Object.keys(dict);
-} catch (e) {
-  console.warn('Local dictionary not found or failed to load:', e);
-}
 
 /**
  * Fetches a random word — prefers the bundled `dictionary.json` for offline operation.
  */
 export const fetchRandomWord = async (): Promise<string> => {
   // Prefer local dictionary
-  if (DICTIONARY_WORDS.length > 0) {
+  if (dictionaryWords.length > 0) {
     // Try several attempts to find a word that passes local filters
     for (let i = 0; i < 20; i++) {
       const candidate =
-        DICTIONARY_WORDS[Math.floor(Math.random() * DICTIONARY_WORDS.length)];
+        dictionaryWords[Math.floor(Math.random() * dictionaryWords.length)];
       const norm = normalizeWord(candidate);
       if (!norm) continue;
       if (isCommonWord(norm)) continue;
@@ -38,7 +29,7 @@ export const fetchRandomWord = async (): Promise<string> => {
 
   // Fallback to any local word if filters didn't succeed
   return (
-    DICTIONARY_WORDS[Math.floor(Math.random() * DICTIONARY_WORDS.length)] ||
+    dictionaryWords[Math.floor(Math.random() * dictionaryWords.length)] ||
     'hello'
   );
 };
