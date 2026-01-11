@@ -47,6 +47,13 @@ class DailyWordWidgetProvider : AppWidgetProvider() {
 
             views.setTextViewText(R.id.widget_word, word)
             views.setTextViewText(R.id.widget_definition, definition)
+            // Show an emoji accent if saved, otherwise a default sparkle
+            val emoji = prefs.getString("favoriteEmoji", "✨") ?: "✨"
+            try {
+                views.setTextViewText(R.id.widget_emoji, emoji)
+            } catch (e: Exception) {
+                // Some remoteviews/layout combos may not support emoji; ignore safely
+            }
 
             // Optional: Add click intent to open the app
             val intent = Intent(context, MainActivity::class.java)
