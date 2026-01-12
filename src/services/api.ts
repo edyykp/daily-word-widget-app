@@ -5,12 +5,10 @@
 
 import { DictionaryEntry } from '../types';
 import DICTIONARY_WORDS from '../assets/dictionary.json';
-const dictionaryWords = DICTIONARY_WORDS as string[];
+import { translateToEnglish } from '../utils/translateIntoEnglish';
 
-// Dictionary API base - supports multiple languages via language code
-const getDictionaryApiBase = (languageCode: string = 'en'): string => {
-  return `https://api.dictionaryapi.dev/api/v2/entries/${languageCode}`;
-};
+const DICTIONARY_API_BASE = 'https://api.dictionaryapi.dev/api/v2/entries/en';
+const dictionaryWords = DICTIONARY_WORDS as string[];
 
 // Helper: fetch a random title from Wiktionary for a specific language
 export const fetchRandomWordFromWiktionary = async (
@@ -18,7 +16,13 @@ export const fetchRandomWordFromWiktionary = async (
 ): Promise<string | null> => {
   try {
     const url = `https://${languageCode}.wiktionary.org/w/api.php?action=query&list=random&rnnamespace=0&rnlimit=1&format=json&origin=*`;
-    const resp = await fetch(url);
+    const resp = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'DailyWordApp/1.0',
+      },
+    });
     if (!resp.ok) return null;
     const json = await resp.json();
     return json?.query?.random?.[0]?.title || null;
@@ -89,12 +93,14 @@ export const fetchWordDefinition = async (
   word: string,
   languageCode: string = 'en',
 ): Promise<DictionaryEntry | null> => {
-  const normalized = normalizeWord(word);
+  const normalized = await translateToEnglish(
+    normalizeWord(word),
+    languageCode,
+  );
   if (!normalized) return null;
 
   try {
-    const apiBase = getDictionaryApiBase(languageCode);
-    const response = await fetch(`${apiBase}/${normalized}`);
+    const response = await fetch(`${DICTIONARY_API_BASE}/${normalized}`);
     if (!response.ok) {
       if (response.status === 404) {
         // Not found - let caller retry with another word
