@@ -5,14 +5,12 @@
 //  Created by Stoica, Eduard-Constantin on 09.01.2026.
 //
 
-import WidgetKit
 import AppIntents
+import WidgetKit
 
 struct ConfigurationAppIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource { "Configuration" }
     static var description: IntentDescription { "This is an example widget." }
 
-    // An example configurable parameter.
-    @Parameter(title: "Favorite Emoji", default: "😃")
-    var favoriteEmoji: String
+    // No configurable emoji parameter anymore — UI uses a language badge and part-of-speech.
 }

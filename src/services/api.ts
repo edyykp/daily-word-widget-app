@@ -12,6 +12,22 @@ const getDictionaryApiBase = (languageCode: string = 'en'): string => {
   return `https://api.dictionaryapi.dev/api/v2/entries/${languageCode}`;
 };
 
+// Helper: fetch a random title from Wiktionary for a specific language
+export const fetchRandomWordFromWiktionary = async (
+  languageCode: string,
+): Promise<string | null> => {
+  try {
+    const url = `https://${languageCode}.wiktionary.org/w/api.php?action=query&list=random&rnnamespace=0&rnlimit=1&format=json&origin=*`;
+    const resp = await fetch(url);
+    if (!resp.ok) return null;
+    const json = await resp.json();
+    return json?.query?.random?.[0]?.title || null;
+  } catch (e) {
+    console.warn('Wiktionary fetch failed for', languageCode, e);
+    return null;
+  }
+};
+
 /**
  * Fetches a random word — prefers the bundled `dictionary.json` for offline operation.
  * For non-English languages, uses a random word API.
@@ -39,58 +55,20 @@ export const fetchRandomWord = async (
     );
   }
 
-  // For non-English, try to get a random word from API
-  // Note: Since we only have English dictionary locally, we try a common word approach
-  // for non-English languages and rely on the dictionary API to validate the word exists
-  const commonWords: { [key: string]: string[] } = {
-    es: ['amor', 'casa', 'tiempo', 'vida', 'mundo', 'persona', 'libro', 'día'],
-    fr: [
-      'amour',
-      'maison',
-      'temps',
-      'vie',
-      'monde',
-      'personne',
-      'livre',
-      'jour',
-    ],
-    de: ['liebe', 'haus', 'zeit', 'leben', 'welt', 'person', 'buch', 'tag'],
-    it: [
-      'amore',
-      'casa',
-      'tempo',
-      'vita',
-      'mondo',
-      'persona',
-      'libro',
-      'giorno',
-    ],
-    pt: ['amor', 'casa', 'tempo', 'vida', 'mundo', 'pessoa', 'livro', 'dia'],
-    ru: ['любовь', 'дом', 'время', 'жизнь', 'мир', 'человек', 'книга', 'день'],
-    ja: ['愛', '家', '時間', '人生', '世界', '人', '本', '日'],
-    ko: ['사랑', '집', '시간', '인생', '세계', '사람', '책', '날'],
-    zh: ['爱', '家', '时间', '生活', '世界', '人', '书', '天'],
-    ar: ['حب', 'بيت', 'وقت', 'حياة', 'عالم', 'شخص', 'كتاب', 'يوم'],
-    hi: ['प्रेम', 'घर', 'समय', 'जीवन', 'दुनिया', 'व्यक्ति', 'किताब', 'दिन'],
-    tr: ['aşk', 'ev', 'zaman', 'hayat', 'dünya', 'kişi', 'kitap', 'gün'],
-    nl: ['liefde', 'huis', 'tijd', 'leven', 'wereld', 'persoon', 'boek', 'dag'],
-    pl: [
-      'miłość',
-      'dom',
-      'czas',
-      'życie',
-      'świat',
-      'osoba',
-      'książka',
-      'dzień',
-    ],
-  };
-
-  // If we have common words for this language, try using them
-  if (commonWords[languageCode] && commonWords[languageCode].length > 0) {
-    const words = commonWords[languageCode];
-    // Return a random common word - the dictionary API will validate it
-    return words[Math.floor(Math.random() * words.length)];
+  // Try Wiktionary random word for this language before falling back to English
+  try {
+    const wikWord = await fetchRandomWordFromWiktionary(languageCode);
+    if (wikWord) {
+      const norm = normalizeWord(wikWord);
+      if (norm) return wikWord;
+      // If the word uses non-Latin scripts (normalizeWord strips it), accept non-empty titles
+      if (wikWord && wikWord.trim().length > 0) return wikWord;
+    }
+  } catch (e) {
+    console.warn(
+      'Wiktionary lookup failed, falling back to local English list',
+      e,
+    );
   }
 
   // Last resort: fallback to English word (will need translation/definition)
@@ -122,6 +100,7 @@ export const fetchWordDefinition = async (
         // Not found - let caller retry with another word
         return null;
       }
+      console.log(normalized, response.status, await response.text());
       throw new Error('Failed to fetch word definition');
     }
     const entries: DictionaryEntry[] = await response.json();

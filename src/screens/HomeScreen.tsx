@@ -13,6 +13,8 @@ import {
   TouchableOpacity,
   Alert,
   Platform,
+  NativeModules,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DailyWord } from '../types';
@@ -24,6 +26,23 @@ export const HomeScreen: React.FC = () => {
   const [dailyWord, setDailyWord] = useState<DailyWord | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    // Query native module for current playing state
+    const fetchIsPlaying = async () => {
+      try {
+        const { WidgetModule } = NativeModules;
+        if (WidgetModule && typeof WidgetModule.getIsPlaying === 'function') {
+          const playing = await WidgetModule.getIsPlaying();
+          setIsPlaying(Boolean(playing));
+        }
+      } catch {
+        // ignore
+      }
+    };
+    fetchIsPlaying();
+  }, []);
 
   useEffect(() => {
     loadDailyWord();
@@ -59,7 +78,7 @@ export const HomeScreen: React.FC = () => {
     }
   };
 
-  const handleLanguageChange = async (languageCode: string) => {
+  const handleLanguageChange = async (_languageCode: string) => {
     try {
       // Language change triggers a new word fetch
       setLoading(true);
@@ -103,7 +122,60 @@ export const HomeScreen: React.FC = () => {
             <View style={styles.wordHeader}>
               <Text style={styles.word}>{dailyWord.word}</Text>
               {dailyWord.phonetic && (
-                <Text style={styles.phonetic}>{dailyWord.phonetic}</Text>
+                <View style={styles.phoneticRow}>
+                  <Text style={styles.phonetic}>{dailyWord.phonetic}</Text>
+                  <TouchableOpacity
+                    style={styles.playButton}
+                    onPress={async () => {
+                      try {
+                        const { WidgetModule } = NativeModules;
+                        if (isPlaying) {
+                          // Stop playback
+                          if (
+                            WidgetModule &&
+                            typeof WidgetModule.stopPhonetic === 'function'
+                          ) {
+                            await WidgetModule.stopPhonetic();
+                          } else if (Platform.OS === 'ios') {
+                            const url = `dailywordwidget://stop`;
+                            Linking.openURL(url).catch(() => {});
+                          }
+                          setIsPlaying(false);
+                          return;
+                        }
+
+                        // Start playback
+                        if (
+                          WidgetModule &&
+                          typeof WidgetModule.playPhonetic === 'function'
+                        ) {
+                          setIsPlaying(true);
+                          // Await resolution so we can clear state when finished
+                          await WidgetModule.playPhonetic(
+                            dailyWord.phonetic || '',
+                          );
+                          setIsPlaying(false);
+                        } else if (Platform.OS === 'ios') {
+                          // open URL scheme to trigger native TTS handler
+                          setIsPlaying(true);
+                          const url = `dailywordwidget://play?phonetic=${encodeURIComponent(
+                            dailyWord.phonetic || '',
+                          )}`;
+                          Linking.openURL(url)
+                            .catch(() => {})
+                            .finally(() => setIsPlaying(false));
+                        }
+                      } catch (e) {
+                        console.warn('Play phonetic failed', e);
+                        setIsPlaying(false);
+                      }
+                    }}
+                  >
+                    <Text style={styles.playButtonText}>
+                      {isPlaying ? 'Pause' : 'Play'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               )}
             </View>
 
@@ -215,8 +287,25 @@ const styles = StyleSheet.create({
   word: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: '#0A66C2',
     marginBottom: 4,
+  },
+  phoneticRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginBottom: 8,
+  },
+  playButton: {
+    marginLeft: 12,
+    backgroundColor: '#0A66C2',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 10,
+  },
+  playButtonText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
   },
   phonetic: {
     fontSize: 18,

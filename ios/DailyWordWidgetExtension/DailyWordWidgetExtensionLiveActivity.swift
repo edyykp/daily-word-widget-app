@@ -6,13 +6,15 @@
 //
 
 import ActivityKit
-import WidgetKit
 import SwiftUI
+import WidgetKit
 
 struct DailyWordWidgetExtensionAttributes: ActivityAttributes {
     public struct ContentState: Codable, Hashable {
         // Dynamic stateful properties about your activity go here!
-        var emoji: String
+        var word: String
+        var phonetic: String
+        var definition: String
     }
 
     // Fixed non-changing properties about your activity go here!
@@ -23,8 +25,18 @@ struct DailyWordWidgetExtensionLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: DailyWordWidgetExtensionAttributes.self) { context in
             // Lock screen/banner UI goes here
-            VStack {
-                Text("Hello \(context.state.emoji)")
+            VStack(alignment: .leading, spacing: 6) {
+                Text(context.state.word)
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                Text(context.state.phonetic)
+                    .font(.subheadline)
+                    .italic()
+                    .foregroundColor(.secondary)
+                Text(context.state.definition)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .lineLimit(2)
             }
             .activityBackgroundTint(Color.cyan)
             .activitySystemActionForegroundColor(Color.black)
@@ -34,21 +46,23 @@ struct DailyWordWidgetExtensionLiveActivity: Widget {
                 // Expanded UI goes here.  Compose the expanded UI through
                 // various regions, like leading/trailing/center/bottom
                 DynamicIslandExpandedRegion(.leading) {
-                    Text("Leading")
+                    Text(context.state.word)
+                        .font(.headline)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text("Trailing")
+                    Text(context.state.phonetic)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    Text("Bottom \(context.state.emoji)")
+                    Text(context.state.definition)
+                        .lineLimit(2)
                     // more content
                 }
             } compactLeading: {
-                Text("L")
+                Text(context.state.word)
             } compactTrailing: {
-                Text("T \(context.state.emoji)")
+                Text(context.state.phonetic)
             } minimal: {
-                Text(context.state.emoji)
+                Text(context.state.word)
             }
             .widgetURL(URL(string: "http://www.apple.com"))
             .keylineTint(Color.red)
@@ -63,18 +77,16 @@ extension DailyWordWidgetExtensionAttributes {
 }
 
 extension DailyWordWidgetExtensionAttributes.ContentState {
-    fileprivate static var smiley: DailyWordWidgetExtensionAttributes.ContentState {
-        DailyWordWidgetExtensionAttributes.ContentState(emoji: "😀")
-     }
-     
-     fileprivate static var starEyes: DailyWordWidgetExtensionAttributes.ContentState {
-         DailyWordWidgetExtensionAttributes.ContentState(emoji: "🤩")
-     }
-}
+    fileprivate static var sample1: DailyWordWidgetExtensionAttributes.ContentState {
+        DailyWordWidgetExtensionAttributes.ContentState(
+            word: "Serendipity", phonetic: "/ˌsɛrənˈdɪpɪti/",
+            definition:
+                "The occurrence and development of events by chance in a happy or beneficial way.")
+    }
 
-#Preview("Notification", as: .content, using: DailyWordWidgetExtensionAttributes.preview) {
-   DailyWordWidgetExtensionLiveActivity()
-} contentStates: {
-    DailyWordWidgetExtensionAttributes.ContentState.smiley
-    DailyWordWidgetExtensionAttributes.ContentState.starEyes
+    fileprivate static var sample2: DailyWordWidgetExtensionAttributes.ContentState {
+        DailyWordWidgetExtensionAttributes.ContentState(
+            word: "Ephemeral", phonetic: "/ɪˈfɛmərəl/", definition: "Lasting for a very short time."
+        )
+    }
 }

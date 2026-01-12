@@ -19,13 +19,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Serendipity"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@color/widget_text_primary"
             android:gravity="start"
-            android:layout_marginBottom="6dp"
+            android:layout_marginBottom="4dp"
             android:maxLines="1"
             android:ellipsize="end" />
+
+        <!-- Phonetic line (new) -->
+        <TextView
+            android:id="@+id/widget_phonetic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/ˌsɛrənˈdɪpɪti/"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            android:textColor="@color/widget_text_secondary"
+            android:gravity="start"
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:id="@+id/widget_definition"
@@ -39,17 +51,30 @@
             android:ellipsize="end" />
     </LinearLayout>
 
-    <!-- Accent emoji in the top-right -->
+    <!-- Language badge in the top-right -->
     <TextView
-        android:id="@+id/widget_emoji"
+        android:id="@+id/widget_language"
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:layout_gravity="top|end"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:text="🤩"
-        android:textSize="20sp"
-        android:background="@drawable/widget_emoji_bg"
+        android:text="EN"
+        android:textSize="12sp"
+        android:background="@drawable/widget_language_bg"
+        android:textColor="@color/widget_text_primary"
         android:elevation="2dp" />
+
+    <!-- Play button bottom-right -->
+    <ImageButton
+        android:id="@+id/widget_play"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="10dp"
+        android:src="@android:drawable/ic_media_play"
+        android:background="@drawable/widget_play_bg"
+        android:scaleType="centerInside"
+        android:contentDescription="Play phonetic" />
 
 </FrameLayout>
